@@ -14,31 +14,45 @@ export class TabViewProvider implements vscode.WebviewViewProvider {
     }
 
     public resolveWebviewView(webviewView: vscode.WebviewView) {
+        console.log('Resolving webview view for adhinayan-container');
         this._view = webviewView;
 
-        webviewView.webview.options = {
-            enableScripts: true,
-            localResourceRoots: [this._extensionUri]
-        };
+        try {
+            webviewView.webview.options = {
+                enableScripts: true,
+                localResourceRoots: [this._extensionUri]
+            };
 
-        webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+            webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+            console.log('Webview view resolved successfully');
+            
+            // Handle messages from the webview
+            webviewView.webview.onDidReceiveMessage(message => {
+                // ... message handling ...
+            });
 
-        // Handle messages from the webview
-        webviewView.webview.onDidReceiveMessage(message => {
-            switch (message.command) {
-                case 'switchTab':
-                    this._currentTab = message.tab;
-                    this.updateTree();
-                    break;
-                case 'filterChanged':
-                    this._treeProviders.get(this._currentTab)?.setFilter(message.filter);
-                    break;
-            }
-        });
+            // Initial tree rendering
+            this.updateTree();
+            this.updateSelection();
+        } catch (error) {
+            console.error('Error resolving webview:', error);
+            webviewView.webview.html = this._getErrorHtml();
+        }
+    }
 
-        // Initial tree rendering
-        this.updateTree();
-        this.updateSelection();
+    private _getErrorHtml(): string {
+        return `<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Error</title>
+        </head>
+        <body>
+            <h1>Error Loading View</h1>
+            <p>Please check the extension logs for details.</p>
+        </body>
+        </html>`;
     }
 
     public getSelectedItems(): string[] {
@@ -55,10 +69,11 @@ export class TabViewProvider implements vscode.WebviewViewProvider {
         }
     }
 
-    private _getHtmlForWebview(webview: vscode.Webview) {
+    /* private _getHtmlForWebview(webview: vscode.Webview) {
         const scriptUri = webview.asWebviewUri(
             vscode.Uri.joinPath(this._extensionUri, 'webview', 'tabView.js')
-        );
+        ).toString();  // Add .toString()
+        console.log('Script URI:', scriptUri.toString());
 
         return `<!DOCTYPE html>
       <html lang="en">
@@ -99,7 +114,22 @@ export class TabViewProvider implements vscode.WebviewViewProvider {
         <script src="${scriptUri}"></script>
       </body>
       </html>`;
+    } */
+
+    private _getHtmlForWebview(webview: vscode.Webview) {
+        return `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Test View</title>
+    </head>
+    <body>
+        <h1>Webview is working!</h1>
+    </body>
+    </html>`;
     }
+
     public getTreeProvider(tabId: string): TreeDataProvider | undefined {
         return this._treeProviders.get(tabId);
     }
@@ -116,6 +146,6 @@ export class TabViewProvider implements vscode.WebviewViewProvider {
     // Add to toggleItem() method:
     public toggleItem(tab: string, item: string) {
         this._treeProviders.get(tab)?.toggleItem(item);
-        this.updateSelection(); // Add this line
+        this.updateSelection();
     }
 }

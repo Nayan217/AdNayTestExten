@@ -6,49 +6,36 @@
   "engines": {
     "vscode": "^1.95.0"
   },
+  "publisher": "AdhiNayExtensions",
   "categories": [
     "Other"
   ],
   "activationEvents": [
-    "onView:adhinayan.container"
+    "onView:adhinayan-container"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [{
-        "command": "adhinayan.helloWorld",
-        "title": "Hello World"
-      },
-      {
-        "command": "adhinayan.performAction",
-        "title": "Process Selected Items",
-        "icon": "$(rocket)"
-      }
-    ],
+      "command": "adhinayan.performAction",
+      "title": "Process Selected Items"
+    }],
     "viewsContainers": {
       "activitybar": [{
-        "id": "adhinayan",
+        "id": "adhinayan-activity",
         "title": "adhinayan",
         "icon": "images/NA.svg"
       }]
     },
     "views": {
-      "adhinayan": [{
-        "id": "adhinayan.container",
-        "name": "adhinayan View",
-        "icon": "images/NA.svg"
-
-      }]
-    },
-    "menus": {
-      "view/title": [{
-        "command": "adhinayan.refresh",
-        "when": "view == adhinayan.view",
-        "group": "navigation"
+      "adhinayan-activity": [{
+        "id": "adhinayan-container",
+        "name": "adhinayan View"
       }]
     }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
+    "activate": "webpack && code --extensionDevelopmentPath=.",
     "compile": "webpack",
     "watch": "webpack --watch",
     "package": "webpack --mode production --devtool hidden-source-map",

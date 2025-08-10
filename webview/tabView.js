@@ -55,6 +55,7 @@
       const itemEl = document.createElement('div');
       itemEl.className = `tree-item ${item.isSelected ? 'selected' : ''}`;
       itemEl.textContent = item.label;
+      itemEl.dataset.item = item.label;  // Add this line
 
       itemEl.addEventListener('click', () => {
         vscode.postMessage({
@@ -62,8 +63,6 @@
           tab: currentTab,
           item: item.label
         });
-        // Toggle UI selection immediately
-        itemEl.classList.toggle('selected');
       });
 
       container.appendChild(itemEl);
@@ -76,7 +75,8 @@
   // Add new function to tabView.js:
   function updateSelection(selectedItems) {
     document.querySelectorAll('.tree-item').forEach(itemEl => {
-      const isSelected = selectedItems.includes(itemEl.textContent);
+      const item = itemEl.dataset.item;  // Use dataset
+      const isSelected = selectedItems.includes(item);
       itemEl.classList.toggle('selected', isSelected);
     });
   }
