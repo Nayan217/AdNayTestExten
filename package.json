@@ -28,6 +28,7 @@
     },
     "views": {
       "adhinayan-activity": [{
+        "type": "webview",
         "id": "adhinayan-container",
         "name": "adhinayan View"
       }]

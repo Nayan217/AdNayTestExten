@@ -7,7 +7,8 @@ export function activate(context: vscode.ExtensionContext) {
     console.log('TabViewProvider created');
     // const treeDataProvider = new MyTreeDataProvider();
     // vscode.window.registerTreeDataProvider('adhinayan-container', treeDataProvider);
-    /* const provider = new TabViewProvider(context.extensionUri);
+
+    const provider = new TabViewProvider(context.extensionUri);
     console.log('TabViewProvider created');
 
     try {
@@ -26,30 +27,37 @@ export function activate(context: vscode.ExtensionContext) {
         console.log('Webview provider registered successfully');
     } catch (error) {
         console.error('Error registering webview provider:', error);
-    } */
+    }
 
-    const oMinimalProvider = new MinimalProvider();
-    vscode.window.registerWebviewViewProvider(
-        'adhinayan-container',
-        oMinimalProvider
-    );
 
-    /* context.subscriptions.push(
+
+    context.subscriptions.push(
         vscode.commands.registerCommand('adhinayan.performAction', () => {
             const selectedItems = provider.getSelectedItems();
+
+            if (selectedItems.length === 0) {
+                vscode.window.showInformationMessage('No items selected');
+                return;
+            }
+            debugger;
+           /*  const message = selectedItems.map(item =>
+                `• ${item.r_app_name || item.r_flavor} (${item.r_version})`
+            ).join('\n');
+
             vscode.window.showInformationMessage(
-                `Processing ${selectedItems.length} items: ${selectedItems.join(', ')}`
-            );
+                `Processing ${selectedItems.length} items:\n${message}`
+            ); */
         })
     );
+
     context.subscriptions.push(
-        vscode.commands.registerCommand('adhinayan.toggleItem', (tab: string, item: string) => {
-            provider.getTreeProvider(tab)?.toggleItem(item);
+        vscode.commands.registerCommand('adhinayan.toggleItem', (tab: string, itemId: string) => {
+            provider.getTreeProvider(tab)?.toggleItem(itemId);
         })
-    ); */
+    );
 }
 
-/* export class MyTreeDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
+export class MyTreeDataProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
     getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
         return element;
     }
@@ -61,13 +69,8 @@ export function activate(context: vscode.ExtensionContext) {
             new vscode.TreeItem('Item 3')
         ]);
     }
-} */
-
-export class MinimalProvider implements vscode.WebviewViewProvider {
-    resolveWebviewView(webviewView: vscode.WebviewView) {
-        console.log('MINIMAL PROVIDER RESOLVED!');
-        webviewView.webview.html = `<h1>Webview is working!</h1>`;
-    }
 }
+
+
 
 export function deactivate() { }

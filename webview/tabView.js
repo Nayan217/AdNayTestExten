@@ -1,6 +1,6 @@
 (function () {
   const vscode = acquireVsCodeApi();
-  let currentTab = 'tab1';
+  let currentTab = 'writable';
 
   // Tab switching
   document.querySelectorAll('.tab').forEach(tab => {
@@ -25,12 +25,23 @@
 
   searchButton.addEventListener('click', handleSearch);
   searchInput.addEventListener('keyup', (e) => {
-    if (e.key === 'Enter') { handleSearch(); }
+    if (e.key === 'Enter') handleSearch();
   });
 
   // Action button
   document.getElementById('actionButton').addEventListener('click', () => {
-    vscode.postMessage({ command: 'performAction' });
+    const selectedIds = [];
+    document.querySelectorAll('.item-card.selected').forEach(card => {
+      selectedIds.push(card.dataset.id);
+    });
+
+    vscode.postMessage({
+      command: 'performAction',
+      items: selectedIds
+    });
+  });
+  window.addEventListener('load', () => {
+    vscode.postMessage({ command: 'initialized' });
   });
 
   // Handle messages from extension
@@ -38,46 +49,95 @@
     const message = event.data;
     switch (message.command) {
       case 'updateTree':
-        renderTree(message.items);
+        renderItems(message.items);
         break;
       case 'updateSelection':
         updateSelection(message.selectedItems);
         break;
+      case 'updateButton':
+        updateButtonText(message.text);
+        break;
     }
   });
+  function updateButtonText(text) {
+    const button = document.getElementById('actionButton');
+    if (button) {
+      button.textContent = text;
+    }
+  }
+  updateButtonText('Checkout Writable App');
+  // Render items
+  function renderItems(items) {
+    console.log('Rendering items:', items); // Log to webview console
 
-  // Render tree items
-  function renderTree(items) {
-    const container = document.getElementById('treeContainer');
+    const container = document.getElementById('itemsContainer');
     container.innerHTML = '';
+
+    if (!items || items.length === 0) {
+      container.innerHTML = '<div class="no-items">No items found</div>';
+      console.log('No items to render');
+      return;
+    }
 
     items.forEach(item => {
       const itemEl = document.createElement('div');
-      itemEl.className = `tree-item ${item.isSelected ? 'selected' : ''}`;
-      itemEl.textContent = item.label;
-      itemEl.dataset.item = item.label;  // Add this line
+      itemEl.className = `item-card ${item.isSelected ? 'selected' : ''}`;
+      itemEl.dataset.id = item.id;
 
-      itemEl.addEventListener('click', () => {
+      // Status indicator
+      const statusIndicator = item.status === 'ACTIVE' || item.status === 'DONE' ?
+        '<div class="status-indicator active"></div>' :
+        '<div class="status-indicator"></div>';
+
+      // Method badge
+      const methodBadge = item.method ?
+        `<div class="item-tag">${item.method}</div>` : '';
+
+      // Build number
+      const buildInfo = item.buildno ?
+        `<div class="item-info">Build: ${item.buildno}</div>` : '';
+
+      // Time info
+      const timeInfo = item.time ?
+        `<div class="item-time">${item.time}</div>` : '';
+
+      itemEl.innerHTML = `
+        <div class="item-header">
+          ${statusIndicator}
+          <div class="item-title">${item.title}</div>
+          ${timeInfo}
+        </div>
+        <div class="item-description">${item.description}</div>
+        <div class="item-version">Version: ${item.version}</div>
+        ${buildInfo}
+        <div class="item-tags">
+          ${methodBadge}
+        </div>
+      `;
+
+      itemEl.addEventListener('click', (e) => {
+        // Don't toggle if clicking on a tag
+        if (e.target.classList.contains('item-tag')) return;
+
+        // itemEl.classList.toggle('selected');
+
         vscode.postMessage({
           command: 'toggleItem',
           tab: currentTab,
-          item: item.label
+          itemId: item.id
         });
       });
 
       container.appendChild(itemEl);
+      console.log('Webview script loaded');
     });
-
-    if (items.length === 0) {
-      container.innerHTML = '<div class="no-items">No items found</div>';
-    }
   }
-  // Add new function to tabView.js:
-  function updateSelection(selectedItems) {
-    document.querySelectorAll('.tree-item').forEach(itemEl => {
-      const item = itemEl.dataset.item;  // Use dataset
-      const isSelected = selectedItems.includes(item);
-      itemEl.classList.toggle('selected', isSelected);
+
+  // Update selection
+  function updateSelection(selectedIds) {
+    document.querySelectorAll('.item-card').forEach(card => {
+      const isSelected = selectedIds.includes(card.dataset.id);
+      card.classList.toggle('selected', isSelected);
     });
   }
 })();
