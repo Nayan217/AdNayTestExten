@@ -1,204 +1,495 @@
 export const samDat = {
-    "app_items": [
-    {
-        "r_flavor": "account",
-        "r_description": "Upgrade and Transport",
-        "r_status": "ACTIVE",
-        "r_version": "6-0-86",
-        "r_buildno": "1754406569858", "r_fv_id": "account_6-0-86",
-        "r_is_external": 1,
-        "r_landscape": "EAM",
-        "r_dependant_flavors": "[{\"flv\":\"adm\",\"version\":\"1-0-12\",\"readonly\":true},{\"flv\":\"account\",\"version\":\"6-0-86\",\"readonly\":true}]",
-        "r_app_name": "Account Editor",
-        "r_app_icon": "sap-icon://activity-individual",
-        "r_bol_version": "7-2-195",
-
-    },
-    {
-        "r_flavor": "adm",
-        "r_description": "ADM_Trial Account Console",
-        "r_status": "ACTIVE",
-        "r_version": "1-0-12",
-        "r_buildno": "1754404664557", "r_fv_id": "adm_1-0-12",
-        "r_is_external": 1,
-        "r_landscape": "EAM",
-        "r_dependant_flavors": "[{\"flv\":\"adm\",\"version\":\"1-0-12\",\"readonly\":true}]",
-        "r_app_name": "Adm_ Trial Account Console",
-        "r_app_icon": "sap-icon://activity-individual",
-        "r_bol_version": "7-2-195",
-
-    },
-    {
-        "r_flavor": "app_util",
-        "r_description": "A Sample App 5487",
-        "r_status": "ACTIVE",
-        "r_version": "6-0-32",
-        "r_buildno": "1752143919537", "r_fv_id": "app_util_6-0-32",
-        "r_is_external": 1,
-        "r_landscape": "EAM",
-        "r_dependant_flavors": "[{\"flv\":\"app_util\",\"version\":\"6-0-32\",\"readonly\":true}]",
-        "r_app_name": "App Util",
-        "r_app_icon": "sap-icon://activity-individual",
-        "r_bol_version": "7-2-195",
-
-    },
-    {
-        "r_flavor": "automation_fv_1",
-        "r_description": "automation_fv_1",
-        "r_status": "ACTIVE",
-        "r_version": "1-0-1",
-        "r_buildno": "1729672812228", "r_fv_id": "automation_fv_1_1-0-1",
-        "r_is_external": 0,
-        "r_landscape": "EAM",
-        "r_dependant_flavors": "[{\"flv\":\"automation_fv_1\",\"version\":\"1-0-1\",\"readonly\":false}]",
-        "r_app_name": "automation_fv_1",
-        "r_app_icon": "sap-icon://activity-individual",
-        "r_bol_version": "7-2-195",
-
-    },
-    {
-        "r_flavor": "automation_fv_2",
-        "r_description": "automation_fv_2",
-        "r_status": "ACTIVE",
-        "r_version": "1-0-2",
-        "r_buildno": "1741756015402", "r_fv_id": "automation_fv_2_1-0-2",
-        "r_is_external": 0,
-        "r_landscape": "EAM",
-        "r_dependant_flavors": "[{\"flv\":\"automation_fv_2\",\"version\":\"1-0-2\",\"readonly\":false}]",
-        "r_app_name": "automation_fv_2",
-        "r_app_icon": "sap-icon://activity-individual",
-        "r_bol_version": "7-2-195",
-
-    },
-    {
-        "r_flavor": "kloTouch",
-        "r_version": "7-2-195",
-
-        "r_buildno": 0,
-        "r_is_external": 1,
-        "r_bol_version": "7-2-195",
-        "r_fv_id": "kloTouch_7-2-195",
-
-        "r_dependant_flavors": "[{\"flv\":\"kloTouch\",\"version\":\"7-2-195\",\"readonly\":true}]"
-    },
-    {
-        "r_flavor": "core_fw",
-        "r_version": "7-2-195",
-
-        "r_buildno": 0,
-        "r_is_external": 1,
-        "r_bol_version": "7-2-195",
-        "r_fv_id": "core_fw_7-2-195",
-
-        "r_dependant_flavors": "[{\"flv\":\"core_fw\",\"version\":\"7-2-195\",\"readonly\":true}]"
-    },
-    {
-        "r_flavor": "shared",
-        "r_version": "6-0",
-
-        "r_buildno": 0,
-        "r_is_external": 1,
-        "r_bol_version": "7-2-195",
-        "r_fv_id": "shared_6-0",
-
-        "r_dependant_flavors": "[{\"flv\":\"shared\",\"version\":\"6-0\",\"readonly\":true}]"
-    }
-    ],
-    "developer_apps": {
-        "automation_fv_1_1-0-1": "DEVELOPER",
-        "automation_fv_2_1-0-2": "DEVELOPER",
-        "automation_fv_3_1-0-1": "DEVELOPER",
-        "automation_fv_4_1-0-2": "DEVELOPER",
-        "automation_fv_5_1-0-3": "DEVELOPER",
-        "automation_fv_6_1-0-1": "DEVELOPER",
-        "automation_fv_7_1-0-1": "DEVELOPER",
-        "bol_automation_6-0-2": "DEVELOPER",
-        "eam_4-0-55": "DEVELOPER",
-        "eam_testing_6-0-2": "DEVELOPER",
-        "faq_key_6-0-1": "DEVELOPER",
-        "la_auto_offline_1-0-2": "DEVELOPER",
-        "la_auto_online_1-0-2": "DEVELOPER",
-        "qualification_test_1-0-1": "DEVELOPER",
-        "scheduler_automati_1-0-1": "DEVELOPER",
-        "test_21_1-0-1": "DEVELOPER"
-    },
-    "filesDownload": [
-    {
-        "r_flavor": "kloBo",
-        "r_buildno": 0,
-        "status": "DONE",
-        "r_version": "7-2-195",
-        "ST": 1754938415615
-    },
-    {
-        "r_flavor": "kloExternal",
-        "r_buildno": 0,
-        "status": "DONE",
-        "r_version": "0",
-        "ST": 1754938415616
-    },
-    {
-        "r_flavor": "shared",
-        "r_buildno": 0,
-        "status": "DONE",
-        "r_version": "6-0",
-        "ST": 1754938415616
-    },
-    {
-        "r_flavor": "core_fw",
-        "r_buildno": 0,
-        "status": "DONE",
-        "r_version": "7-2-195",
-        "ST": 1754938415616
-    },
-    {
-        "r_flavor": "faqs",
-        "r_buildno": "1722322736554",
-        "status": "DONE",
-        "r_version": "6-0-6",
-        "ST": 1754938466171
-    },
-    {
-        "r_flavor": "faqs_editor",
-        "r_buildno": "1725269056404",
-        "status": "DONE",
-        "r_version": "6-0-12",
-        "ST": 1754938466171
-    },
-    {
-        "r_flavor": "fw_settings1",
-        "r_buildno": "1753365825526",
-        "status": "DONE",
-        "r_version": "6-0-8",
-        "ST": 1754938466171
-    },
-    {
-        "r_flavor": "superadm_tools",
-        "r_buildno": "1724932128208",
-        "status": "DONE",
-        "r_version": "6-0-4",
-        "ST": 1754938466172
-    },
-    {
-        "r_flavor": "test_21",
-        "r_buildno": "1754896694510",
-        "status": "DONE",
-        "r_version": "1-0-1",
-        "ST": 1754938466173
-    },
-    {
-        "r_flavor": "transport",
-        "r_buildno": "1754487103557",
-        "status": "DONE",
-        "r_version": "1-0-26",
-        "ST": 1754938466173
-    },
-    {
-        "r_flavor": "wf_apps",
-        "r_buildno": "1686725012132",
-        "status": "DONE",
-        "r_version": "1",
-        "ST": 1754938466173
-    }
-    ]
+	app_items: [
+		{
+			r_fv_id: "account_6-0-87",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "adm_1-0-13",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "app_services_6-0-9",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "app_util_6-0-32",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "auth_play_ground_1-0-2",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "cockpit_6-0-107",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "devtools_klotouch_7-1-53",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "faqs_6-0-6",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "faqs_editor_6-0-12",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "fw_landscape_6-0-10",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "fw_settings1_6-0-8",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "homepage_editor_6-0-9",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "job_modeler_6-0-37",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "klotouch_editor_7-0-74",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "klotouch_screens_7-0-2",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "menu_editor_dummy_1-0-1",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "mf_7-0-6",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "nayan_test_1-0-5",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "notif_editor_6-0-16",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "prithick_test_6-0-1",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "raajasekar_test_00_1-0-4",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "sql_executor_6-0-1",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "transport_1-0-28",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "uwl_6-0-15",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "waseem_test_6-0-3",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "wf_apps_7-0-1",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "workflow_admin_6-0-3",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "kloTouch_7-2-195",
+			r_is_external: 1,
+		},
+		{
+			r_fv_id: "core_fw_7-2-195",
+			r_is_external: 1,
+		},
+		{
+			r_fv_id: "shared_6-0",
+			r_is_external: 1,
+		},
+		{
+			r_fv_id: "dummy_flavor_6-0-9",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "msg_monitoring_6-0-74",
+			r_is_external: 0,
+		},
+		{
+			r_fv_id: "bol_editor_7-0-90",
+			r_is_external: 0,
+		},
+	],
+	developer_apps: {
+		"account_6-0-87": "DEVELOPER",
+		"adm_1-0-13": "DEVELOPER",
+		"app_services_6-0-9": "DEVELOPER",
+		"app_util_6-0-32": "DEVELOPER",
+		"auth_play_ground_1-0-2": "DEVELOPER",
+		"bol_editor_7-0-90": "DEVELOPER",
+		"cockpit_6-0-107": "DEVELOPER",
+		"devtools_klotouch_7-1-53": "DEVELOPER",
+		"dummy_flavor_6-0-9": "DEVELOPER",
+		"faqs_6-0-6": "DEVELOPER",
+		"faqs_editor_6-0-12": "DEVELOPER",
+		"fw_landscape_6-0-10": "DEVELOPER",
+		"fw_settings1_6-0-8": "DEVELOPER",
+		"klotouch_screens_7-0-2": "DEVELOPER",
+		"menu_editor_dummy_1-0-1": "DEVELOPER",
+		"mf_7-0-6": "DEVELOPER",
+		"msg_monitoring_6-0-74": "DEVELOPER",
+		"nayan_test_1-0-5": "DEVELOPER",
+		"prithick_test_6-0-1": "DEVELOPER",
+		"raajasekar_test_00_1-0-4": "DEVELOPER",
+		"sql_executor_6-0-1": "DEVELOPER",
+		"transport_1-0-28": "DEVELOPER",
+		"uwl_6-0-15": "DEVELOPER",
+		"waseem_test_6-0-3": "DEVELOPER",
+		"wf_apps_7-0-1": "DEVELOPER",
+		"workflow_admin_6-0-3": "DEVELOPER",
+	},
+	filesDownload: [
+		{
+			r_flavor: "kloBo",
+			r_buildno: 0,
+			status: "DONE",
+			r_version: "7-2-195",
+			ST: 1754903419169,
+		},
+		{
+			r_flavor: "kloExternal",
+			r_buildno: 0,
+			status: "DONE",
+			r_version: "0",
+			ST: 1754903419169,
+		},
+		{
+			r_flavor: "core_fw",
+			r_buildno: 0,
+			status: "DONE",
+			r_version: "7-2-195",
+			ST: 1754903419169,
+		},
+		{
+			r_flavor: "kloTouch",
+			r_buildno: 0,
+			status: "DONE",
+			r_version: "7-2-195",
+			ST: 1754903420079,
+		},
+		{
+			r_flavor: "openUI5",
+			r_buildno: 0,
+			status: "DONE",
+			r_version: "1_120_27",
+			ST: 1754903420079,
+		},
+		{
+			r_flavor: "kloExternal",
+			r_buildno: 0,
+			status: "DONE",
+			r_version: "1",
+			ST: 1754903420079,
+		},
+		{
+			r_flavor: "openUI5",
+			r_buildno: 0,
+			status: "DONE",
+			r_version: "1_120_27",
+			ST: 1754903420079,
+		},
+		{
+			r_flavor: "account",
+			r_buildno: "1754901063391",
+			status: "DONE",
+			r_version: "6-0-87",
+			ST: 1754903429142,
+		},
+		{
+			r_flavor: "adm",
+			r_buildno: "1754900961698",
+			status: "DONE",
+			r_version: "1-0-13",
+			ST: 1754903429142,
+		},
+		{
+			r_flavor: "app_services",
+			r_buildno: "1741081964633",
+			status: "DONE",
+			r_version: "6-0-9",
+			ST: 1754903429142,
+		},
+		{
+			r_flavor: "app_util",
+			r_buildno: "1752143919537",
+			status: "DONE",
+			r_version: "6-0-32",
+			ST: 1754903429142,
+		},
+		{
+			r_flavor: "auth_play_ground",
+			r_buildno: "1746678367055",
+			status: "DONE",
+			r_version: "1-0-2",
+			ST: 1754903429143,
+		},
+		{
+			r_flavor: "bol_editor",
+			r_buildno: "1754897411109",
+			status: "DONE",
+			r_version: "7-0-89",
+			ST: 1754903429143,
+		},
+		{
+			r_flavor: "cockpit",
+			r_buildno: "1754901010846",
+			status: "DONE",
+			r_version: "6-0-107",
+			ST: 1754903429143,
+		},
+		{
+			r_flavor: "devtools_klotouch",
+			r_buildno: "1754458715752",
+			status: "DONE",
+			r_version: "7-1-53",
+			ST: 1754903429143,
+		},
+		{
+			r_flavor: "dummy_flavor",
+			r_buildno: "1744886686812",
+			status: "DONE",
+			r_version: "6-0-8",
+			ST: 1754903429144,
+		},
+		{
+			r_flavor: "faqs",
+			r_buildno: "1722322736552",
+			status: "DONE",
+			r_version: "6-0-6",
+			ST: 1754903429144,
+		},
+		{
+			r_flavor: "faqs_editor",
+			r_buildno: "1725269056403",
+			status: "DONE",
+			r_version: "6-0-12",
+			ST: 1754903429144,
+		},
+		{
+			r_flavor: "fw_landscape",
+			r_buildno: "1751529059231",
+			status: "DONE",
+			r_version: "6-0-10",
+			ST: 1754903429144,
+		},
+		{
+			r_flavor: "fw_settings1",
+			r_buildno: "1753365825526",
+			status: "DONE",
+			r_version: "6-0-8",
+			ST: 1754903429145,
+		},
+		{
+			r_flavor: "homepage_editor",
+			r_buildno: "1746190697673",
+			status: "DONE",
+			r_version: "6-0-9",
+			ST: 1754903429145,
+		},
+		{
+			r_flavor: "job_modeler",
+			r_buildno: "1753769778258",
+			status: "DONE",
+			r_version: "6-0-37",
+			ST: 1754903429145,
+		},
+		{
+			r_flavor: "klotouch_editor",
+			r_buildno: "1754628873599",
+			status: "DONE",
+			r_version: "7-0-74",
+			ST: 1754903429145,
+		},
+		{
+			r_flavor: "klotouch_screens",
+			r_buildno: "1722321393599",
+			status: "DONE",
+			r_version: "7-0-2",
+			ST: 1754903429146,
+		},
+		{
+			r_flavor: "menu_editor_dummy",
+			r_buildno: "1722576788144",
+			status: "DONE",
+			r_version: "1-0-1",
+			ST: 1754903429146,
+		},
+		{
+			r_flavor: "mf",
+			r_buildno: "1753366097103",
+			status: "DONE",
+			r_version: "7-0-6",
+			ST: 1754903429146,
+		},
+		{
+			r_flavor: "msg_monitoring",
+			r_buildno: "1752589066471",
+			status: "DONE",
+			r_version: "6-0-73",
+			ST: 1754903429146,
+		},
+		{
+			r_flavor: "nayan_test",
+			r_buildno: "1750865062234",
+			status: "DONE",
+			r_version: "1-0-5",
+			ST: 1754903429147,
+		},
+		{
+			r_flavor: "notif_editor",
+			r_buildno: "1753683469417",
+			status: "DONE",
+			r_version: "6-0-16",
+			ST: 1754903429147,
+		},
+		{
+			r_flavor: "prithick_test",
+			r_buildno: "1723787880241",
+			status: "DONE",
+			r_version: "6-0-1",
+			ST: 1754903429147,
+		},
+		{
+			r_flavor: "raajasekar_test_00",
+			r_buildno: "1750335075810",
+			status: "DONE",
+			r_version: "1-0-4",
+			ST: 1754903429147,
+		},
+		{
+			r_flavor: "sql_executor",
+			r_buildno: "1754568543498",
+			status: "DONE",
+			r_version: "6-0-1",
+			ST: 1754903429148,
+		},
+		{
+			r_flavor: "transport",
+			r_buildno: "1754636877635",
+			status: "DONE",
+			r_version: "1-0-28",
+			ST: 1754903429148,
+		},
+		{
+			r_flavor: "uwl",
+			r_buildno: "1754497198070",
+			status: "DONE",
+			r_version: "6-0-15",
+			ST: 1754903429148,
+		},
+		{
+			r_flavor: "waseem_test",
+			r_buildno: "1733308561636",
+			status: "DONE",
+			r_version: "6-0-3",
+			ST: 1754903429149,
+		},
+		{
+			r_flavor: "wf_apps",
+			r_buildno: "1721898532214",
+			status: "DONE",
+			r_version: "7-0-1",
+			ST: 1754903429149,
+		},
+		{
+			r_flavor: "workflow_admin",
+			r_buildno: "1748329207243",
+			status: "DONE",
+			r_version: "6-0-3",
+			ST: 1754903429150,
+		},
+		{
+			r_flavor: "dummy_flavor",
+			r_buildno: "1754907565716",
+			status: "DONE",
+			r_version: "6-0-9",
+			ST: 1754907598443,
+		},
+		{
+			r_flavor: "msg_monitoring",
+			r_buildno: "1754907807866",
+			status: "DONE",
+			r_version: "6-0-74",
+			ST: 1754915647056,
+		},
+		{
+			r_flavor: "shared",
+			r_buildno: 0,
+			status: "DONE",
+			r_version: "6-0",
+			ST: 1754979957044,
+		},
+		{
+			r_flavor: "bol_editor",
+			r_buildno: "1754920271933",
+			status: "DONE",
+			r_version: "7-0-90",
+			ST: 1754979957044,
+		},
+	],
+	"writeAbleFVs": [
+		"account_6-0-87",
+		"adm_1-0-13",
+		"app_services_6-0-9",
+		"app_util_6-0-32",
+		"auth_play_ground_1-0-2",
+		"cockpit_6-0-107",
+		"devtools_klotouch_7-1-53",
+		"faqs_6-0-6",
+		"faqs_editor_6-0-12",
+		"fw_landscape_6-0-10",
+		"fw_settings1_6-0-8",
+		"klotouch_screens_7-0-2",
+		"menu_editor_dummy_1-0-1",
+		"mf_7-0-6",
+		"nayan_test_1-0-5",
+		"prithick_test_6-0-1",
+		"raajasekar_test_00_1-0-4",
+		"sql_executor_6-0-1",
+		"transport_1-0-28",
+		"uwl_6-0-15",
+		"waseem_test_6-0-3",
+		"wf_apps_7-0-1",
+		"workflow_admin_6-0-3",
+		"dummy_flavor_6-0-9",
+		"msg_monitoring_6-0-74",
+		"bol_editor_7-0-90"
+	],
+	"internalNonEditableFVs": [
+		"homepage_editor_6-0-9",
+		"job_modeler_6-0-37",
+		"klotouch_editor_7-0-74",
+		"notif_editor_6-0-16"
+	],
+	"checkoutFVs": {
+		"fw_settings1_6-0-8": {
+			"lct": 1726324380373
+		},
+		"job_modeler_6-0-37": {
+			"lct": 1726383679356
+		}
+	}
 };

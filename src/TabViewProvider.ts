@@ -1,95 +1,103 @@
-import * as vscode from 'vscode';
-import { TreeDataProvider } from './TreeDataProvider';
-import { samDat } from './sampleDate/sampleData'; // Adjusted import path after moving file to src
+import * as vscode from "vscode";
+import { TreeDataProvider } from "./TreeDataProvider";
+import { samDat } from "./sampleDate/sampleData"; // Adjusted import path after moving file to src
 
 export class TabViewProvider implements vscode.WebviewViewProvider {
-    private _view?: vscode.WebviewView;
-    private _treeProviders: Map<string, TreeDataProvider> = new Map();
-    private _currentTab = 'tab1';
+	private _view?: vscode.WebviewView;
+	private _treeProviders: Map<string, TreeDataProvider> = new Map();
+	private _currentTab = "tab1";
 
-    constructor(private readonly _extensionUri: vscode.Uri) {
-        // Log counts of each data set
-        console.log("Initializing TabViewProvider with data:");
+	constructor(private readonly _extensionUri: vscode.Uri) {
+		// Log counts of each data set
+		console.log("Initializing TabViewProvider with data:");
 
-        // Writable
-        const writableItems = samDat.app_items.filter(item =>
-            samDat.developer_apps.hasOwnProperty(item.r_fv_id)
-        );
-        console.log(`Writable items count: ${writableItems.length}`);
+		// Writable
+		const writableItems = samDat.app_items.filter((item) => samDat.developer_apps.hasOwnProperty(item.r_fv_id));
+		console.log(`Writable items count: ${writableItems.length}`);
 
-        // Read-Only
-        const readOnlyItems = samDat.app_items.filter(item =>
-            !samDat.developer_apps.hasOwnProperty(item.r_fv_id) &&
-            item.r_is_external === 0
-        );
-        console.log(`Read-Only items count: ${readOnlyItems.length}`);
+		// Read-Only
+		const readOnlyItems = samDat.app_items.filter((item) => !samDat.developer_apps.hasOwnProperty(item.r_fv_id) && item.r_is_external === 0);
+		console.log(`Read-Only items count: ${readOnlyItems.length}`);
 
-        // FilesDownloaded
-        const filesDownloadedItems = samDat.filesDownload;
-        console.log(`FilesDownloaded items count: ${filesDownloadedItems.length}`);
+		// FilesDownloaded
+		const filesDownloadedItems = samDat.filesDownload;
+		console.log(`FilesDownloaded items count: ${filesDownloadedItems.length}`);
 
-        // Initialize providers
-        this._treeProviders.set('writable', new TreeDataProvider(writableItems));
-        this._treeProviders.set('readonly', new TreeDataProvider(readOnlyItems));
-        this._treeProviders.set('files', new TreeDataProvider(filesDownloadedItems));
-    }
+		// Initialize providers
+		this._treeProviders.set("writable", new TreeDataProvider(writableItems, "writable"));
+		this._treeProviders.set("readonly", new TreeDataProvider(readOnlyItems, "readonly"));
+		// this._treeProviders.set("files", new TreeDataProvider(filesDownloadedItems, "files"));
+	}
 
+	// ... rest of the class ...
 
+	public resolveWebviewView(webviewView: vscode.WebviewView) {
+		console.log("Resolving webview view");
+		this._view = webviewView;
 
-    // ... rest of the class ...
+		try {
+			webviewView.webview.options = {
+				enableScripts: true,
+				localResourceRoots: [this._extensionUri],
+			};
 
-    public resolveWebviewView(webviewView: vscode.WebviewView) {
-        console.log('Resolving webview view');
-        this._view = webviewView;
+			webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+			console.log("Webview HTML set");
+			this.updateButtonText();
+			// Handle messages from the webview
+			webviewView.webview.onDidReceiveMessage((message) => {
+				console.log(`Received message from webview: ${message.command}`);
+				switch (message.command) {
+					case "switchTab":
+						console.log(`Switching to tab: ${message.tab}`);
+						this._currentTab = message.tab;
+						this.updateTree();
+						this.updateButtonText();
+						break;
+					case "filterChanged":
+						console.log(`Filter changed: ${message.filter}`);
+						this._treeProviders.get(this._currentTab)?.setFilter(message.filter);
+						this.updateTree();
+						break;
+					case "toggleItem":
+						console.log(`Toggling item: ${message.itemId} in tab ${message.tab}`);
+						const provider = this._treeProviders.get(message.tab);
+						if (provider) {
+							if (message.select) {
+								provider.toggleItem(message.itemId);
+							} else {
+								provider.toggleItem(message.itemId);
+							}
+							this.updateSelection();
+						}
+						break;
+					case "initialized":
+						this.updateTree();
+						this.updateSelection();
+						this.updateButtonText();
+						break;
+					case "performAction":
+						console.log("Performing action with selected items");
+						const selectedItems = this.getSelectedItems();
+						if (selectedItems.length === 0) {
+							vscode.window.showInformationMessage("No items selected");
+							return;
+						}
+				}
+			});
 
-        try {
-            webviewView.webview.options = {
-                enableScripts: true,
-                localResourceRoots: [this._extensionUri]
-            };
+			// Initial tree rendering
+			console.log("Performing initial tree rendering");
+			this.updateTree();
+			this.updateSelection();
+		} catch (error) {
+			console.error("Error resolving webview:", error);
+			webviewView.webview.html = this._getErrorHtml();
+		}
+	}
 
-            webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
-            console.log('Webview HTML set');
-
-            // Handle messages from the webview
-            webviewView.webview.onDidReceiveMessage(message => {
-                console.log(`Received message from webview: ${message.command}`);
-                switch (message.command) {
-                    case 'switchTab':
-                        console.log(`Switching to tab: ${message.tab}`);
-                        this._currentTab = message.tab;
-                        this.updateTree();
-                        this.updateButtonText();
-                        break;
-                    case 'filterChanged':
-                        console.log(`Filter changed: ${message.filter}`);
-                        this._treeProviders.get(this._currentTab)?.setFilter(message.filter);
-                        this.updateTree();
-                        break;
-                    case 'toggleItem':
-                        console.log(`Toggling item: ${message.itemId} in tab ${message.tab}`);
-                        this.toggleItem(message.tab/* , message.itemId */);
-                        break;
-                    case 'initialized':
-                        this.updateTree();
-                        this.updateSelection();
-                        this.updateButtonText();
-                        break;
-                }
-            });
-
-            // Initial tree rendering
-            console.log('Performing initial tree rendering');
-            this.updateTree();
-            this.updateSelection();
-        } catch (error) {
-            console.error('Error resolving webview:', error);
-            webviewView.webview.html = this._getErrorHtml();
-        }
-    }
-
-    private _getErrorHtml(): string {
-        return `<!DOCTYPE html>
+	private _getErrorHtml(): string {
+		return `<!DOCTYPE html>
         <html lang="en">
         <head>
             <meta charset="UTF-8">
@@ -101,40 +109,36 @@ export class TabViewProvider implements vscode.WebviewViewProvider {
             <p>Please check the extension logs for details.</p>
         </body>
         </html>`;
-    }
+	}
 
-    public getSelectedItems(): string[] {
-        return this._treeProviders.get(this._currentTab)?.getSelectedItems() || [];
-    }
-    public toggleItem(itemId: string) {
-        const provider = this._treeProviders.get(this._currentTab);
-        if (provider) {
-            provider.toggleItem(itemId);
-            this.updateSelection();
-        }
-    }
-    private updateTree() {
-        if (this._view) {
-            const items = this._treeProviders.get(this._currentTab)?.getTreeItems() || [];
-            console.log(`Sending ${items.length} items to webview for tab: ${this._currentTab}`);
+	public getSelectedItems(): string[] {
+		return this._treeProviders.get(this._currentTab)?.getSelectedItems() || [];
+	}
+	public toggleItem(itemId: string) {
+		const provider = this._treeProviders.get(this._currentTab);
+		if (provider) {
+			provider.toggleItem(itemId);
+			this.updateSelection();
+		}
+	}
+	private updateTree() {
+		if (this._view) {
+			const items = this._treeProviders.get(this._currentTab)?.getTreeItems() || [];
+			console.log(`Sending ${items.length} items to webview for tab: ${this._currentTab}`);
 
-            this._view.webview.postMessage({
-                command: 'updateTree',
-                items: items
-            });
-        }
-    }
+			this._view.webview.postMessage({
+				command: "updateTree",
+				items: items,
+			});
+		}
+	}
 
-    private _getHtmlForWebview(webview: vscode.Webview) {
-        const scriptUri = webview.asWebviewUri(
-            vscode.Uri.joinPath(this._extensionUri, 'webview', 'tabView.js')
-        ).toString();
+	private _getHtmlForWebview(webview: vscode.Webview) {
+		const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "webview", "tabView.js")).toString();
 
-        const styleUri = webview.asWebviewUri(
-            vscode.Uri.joinPath(this._extensionUri, 'webview', 'styles.css')
-        ).toString();
+		const styleUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, "webview", "styles.css")).toString();
 
-        return `<!DOCTYPE html>
+		return `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -157,7 +161,7 @@ export class TabViewProvider implements vscode.WebviewViewProvider {
             <div class="tabs">
                 <div class="tab active" data-tab="writable">Writable</div>
                 <div class="tab" data-tab="readonly">Read-Only</div>
-                <div class="tab" data-tab="files">FilesDownloaded</div>
+                <!-- <div class="tab" data-tab="files">FilesDownloaded</div> -->
             </div>
         </div>
         
@@ -180,49 +184,47 @@ export class TabViewProvider implements vscode.WebviewViewProvider {
         </script>
     </body>
     </html>`;
-    }
+	}
 
+	public getTreeProvider(tabId: string): TreeDataProvider | undefined {
+		return this._treeProviders.get(tabId);
+	}
+	// Add to TabViewProvider class
+	private updateSelection() {
+		if (this._view) {
+			const selected = this.getSelectedItems();
+			this._view.webview.postMessage({
+				command: "updateSelection",
+				selectedItems: selected,
+			});
+		}
+	}
+	private updateButtonText() {
+		if (this._view) {
+			let buttonText = "";
+			switch (this._currentTab) {
+				case "writable":
+					buttonText = "Checkout Writable App";
+					break;
+				case "readonly":
+					buttonText = "Checkout Read-Only App";
+					break;
+				case "files":
+					buttonText = "Repair Framework";
+					break;
+				default:
+					buttonText = "Process Selected Items";
+			}
 
-
-    public getTreeProvider(tabId: string): TreeDataProvider | undefined {
-        return this._treeProviders.get(tabId);
-    }
-    // Add to TabViewProvider class
-    private updateSelection() {
-        if (this._view) {
-            const selected = this.getSelectedItems();
-            this._view.webview.postMessage({
-                command: 'updateSelection',
-                selectedItems: selected
-            });
-        }
-    }
-    private updateButtonText() {
-        if (this._view) {
-            let buttonText = '';
-            switch (this._currentTab) {
-                case 'writable':
-                    buttonText = 'Checkout Writable App';
-                    break;
-                case 'readonly':
-                    buttonText = 'Checkout Read-Only App';
-                    break;
-                case 'files':
-                    buttonText = 'Repair Framework';
-                    break;
-                default:
-                    buttonText = 'Process Selected Items';
-            }
-
-            this._view.webview.postMessage({
-                command: 'updateButton',
-                text: buttonText
-            });
-        }
-    }
-    // Add to toggleItem() method:
-    // public toggleItem(tab: string, item: string) {
-    //     this._treeProviders.get(tab)?.toggleItem(item);
-    //     this.updateSelection();
-    // }
+			this._view.webview.postMessage({
+				command: "updateButton",
+				text: buttonText,
+			});
+		}
+	}
+	// Add to toggleItem() method:
+	// public toggleItem(tab: string, item: string) {
+	//     this._treeProviders.get(tab)?.toggleItem(item);
+	//     this.updateSelection();
+	// }
 }
