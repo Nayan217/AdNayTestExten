@@ -25,7 +25,9 @@
 
 	searchButton.addEventListener("click", handleSearch);
 	searchInput.addEventListener("keyup", (e) => {
-		if (e.key === "Enter") handleSearch();
+		if (e.key === "Enter") {
+			handleSearch();
+		}
 	});
 
 	// Action button
@@ -102,8 +104,9 @@
 			itemEl.innerHTML = content;
 
 			itemEl.addEventListener("click", (e) => {
-				if (e.target.classList.contains("item-tag")) return;
-
+				if (e.target.classList.contains("item-tag")) {
+					return;
+				}
 				const wasSelected = itemEl.classList.contains("selected");
 				itemEl.classList.toggle("selected", !wasSelected);
 

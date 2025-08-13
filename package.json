@@ -11,7 +11,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onView:adhinayan-container"
+    "onStartupFinished"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -30,7 +30,8 @@
       "adhinayan-activity": [{
         "type": "webview",
         "id": "adhinayan-container",
-        "name": "adhinayan View"
+        "name": "adhinayan View",
+        "icon": "images/NA.svg"
       }]
     }
   },
