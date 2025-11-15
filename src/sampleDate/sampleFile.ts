@@ -1,6 +1,6 @@
-import { FileExplorer } from "./fileExplorer";
+// import { FileExplorer } from "./fileExplorer";
 import * as querystring from "querystring";
-import * as extract from "extract-zip";
+import extract from "extract-zip";
 import { ClientRequest } from "http";
 import { TextEncoder } from "util";
 import * as vscode from "vscode";
@@ -19,7 +19,7 @@ let vsclientPort: string;
 let savePanel: vscode.WebviewPanel;
 let updateAppPanel: vscode.WebviewPanel;
 let isKlarionWorksapce: boolean;
-let _FileExplorer: FileExplorer;
+// let _FileExplorer: FileExplorer;
 //let zipDownloadPromise:DelayedPromise;
 let isSetupFirstTime: boolean;
 let isAutomationEnabled: boolean;
@@ -221,12 +221,12 @@ export async function activate(context: vscode.ExtensionContext, uri: string) {
 			};
 			try {
 				console.log("triggering reveal");
-				let respTree = await _FileExplorer?.TreeView.reveal(entry, {
+				/* let respTree = await _FileExplorer?.TreeView.reveal(entry, {
 					select: true,
 					focus: true,
 					expand: true,
 				});
-				console.log(respTree);
+				console.log(respTree); */
 			} catch (err) {
 				console.log("error " + err);
 			}
@@ -270,7 +270,7 @@ export async function activate(context: vscode.ExtensionContext, uri: string) {
 				window.showInformationMessage("creation of _gen.ts file is not allowed");
 			}
 			//#region //PR0050 @Nayan 10MAY2024 PROC-6365
-			let actaulFileName = event.files[0].path.split("/").pop();
+			let actaulFileName:string = event.files[0].path.split("/").pop() || "";
 			let regexToCheckFolder = /[A-Z]|[^\w_]/;
 			if (
 				event.files[0].path.includes("src/") &&
@@ -306,7 +306,7 @@ export async function activate(context: vscode.ExtensionContext, uri: string) {
 					return;
 				}
 				//#endregion
-				let actaulFileName = event.files[0].path.split("/").pop();
+				let actaulFileName:string = event.files[0].path.split("/").pop()|| "";
 				// if(["entity","query","controller","util","rules","entity_gen","app_service","query_gen","index","media","css","js","view",'resources'].includes(actaulFileName))//PR0050 @Nayan 10MAY2024 PROC-7837-commented
 				if (
 					[
@@ -330,11 +330,11 @@ export async function activate(context: vscode.ExtensionContext, uri: string) {
 				)
 					//PR0050 @Nayan 10MAY2024 PROC-7837 - added
 					return;
-				let fileName = actaulFileName?.split(".").shift();
+				let fileName:string = actaulFileName?.split(".").shift()||"";
 				let cdn_app_path = event.files[0].path.split("/src/")[1];
 				let flavor_version: string = <string>cdn_app_path.split("/").shift();
 				let logContent: FileLogFormat = await getlogFileData();
-				if (logContent.internalNonEditableApps.includes(flavor_version)) {
+				if (logContent.internalNonEditableApps?.includes(flavor_version)) {
 					fs.unlinkSync(event.files[0].path.slice(1));
 					return window.showInformationMessage(
 						flavor_version + " is not assigned as a writable app."
@@ -559,7 +559,7 @@ export async function activate(context: vscode.ExtensionContext, uri: string) {
 		vscode.commands.registerCommand("extension.showInhertianceTree", async (event) => {
 			try {
 				if (fs.existsSync(`${workspacePath}/.vscode/log.json`)) {
-					_FileExplorer = new FileExplorer(context);
+					// _FileExplorer = new FileExplorer(context);
 				}
 			} catch (error: any) {}
 		})
@@ -608,7 +608,7 @@ export async function activate(context: vscode.ExtensionContext, uri: string) {
 						let logContent: FileLogFormat = await getlogFileData();
 						let isModified: boolean = false;
 						for (let appDir in logContent.from_query) {
-							if (logContent.internalNonEditableApps.includes(appDir)) continue; //PR0050 @Nayan 13AUG2025 F7.2.XX_25_27-29 PROC-19721 - added to store internalApps
+							if (logContent.internalNonEditableApps?.includes(appDir)) continue; //PR0050 @Nayan 13AUG2025 F7.2.XX_25_27-29 PROC-19721 - added to store internalApps
 							for (let r_file_path in logContent.from_query[appDir]) {
 								if (
 									[
@@ -651,7 +651,7 @@ export async function activate(context: vscode.ExtensionContext, uri: string) {
 							renamed: {},
 						};
 						for (let appDir in logContent.from_query) {
-							if (logContent.internalNonEditableApps.includes(appDir)) continue; //PR0050 @Nayan 13AUG2025 F7.2.XX_25_27-29 PROC-19721 - added to store internalApps
+							if (logContent.internalNonEditableApps?.includes(appDir)) continue; //PR0050 @Nayan 13AUG2025 F7.2.XX_25_27-29 PROC-19721 - added to store internalApps
 							let appDirPath = appDir;
 							for (let r_file_path in logContent.from_query[appDir]) {
 								/*if(logContent?.renamed?.[appDir]?.r_file_path_new == r_file_path || logContent?.renamed?.[appDir]?.r_file_path == r_file_path)
@@ -718,14 +718,14 @@ export async function activate(context: vscode.ExtensionContext, uri: string) {
 										savePanel.dispose();
 									} else {
 										const filesSelected = message.data.selectedFiles;
-										let filesToCheck = [];
-										let flavorToFindConfig = [];
+										let filesToCheck:any[] = [];
+										let flavorToFindConfig :any[]= [];
 										Object.keys(filesSelected).forEach((flavor) => {
 											flavorToFindConfig.push(
 												path.resolve(workspacePath, "src", flavor)
 											);
 											let flavorSelected = filesSelected[flavor];
-											flavorSelected.forEach((filePath) => {
+											flavorSelected.forEach((filePath:string) => {
 												filesToCheck.push(
 													path.resolve(
 														workspacePath,
@@ -737,13 +737,13 @@ export async function activate(context: vscode.ExtensionContext, uri: string) {
 											});
 										});
 										//#region //PR0050 @Nayan 10JUL2025 F7.2.XX_25_27-29 PROC-18559 - catching error
-										let diagnostics = {};
+										let diagnostics:any = {};
 										try {
 											diagnostics = await checkForErrorsInModifiedFile(
 												filesToCheck,
 												flavorToFindConfig
 											);
-										} catch (error) {
+										} catch (error:any) {
 											vscode.window.showErrorMessage(
 												"Error : " + error.message
 											);
@@ -879,7 +879,7 @@ export async function activate(context: vscode.ExtensionContext, uri: string) {
 								vscode.window.showInformationMessage("No Files selected");
 								updateAppPanel.dispose();
 							} else {
-								let appsToDownload = message.data.selectedApps.map((a) => {
+								let appsToDownload = message.data.selectedApps.map((a:any) => {
 									let numIndex =
 										a.indexOf("-") > -1 ? a.indexOf("-") : a.lastIndexOf("_");
 									let flavor = a.slice(0, numIndex);
@@ -916,7 +916,7 @@ export async function activate(context: vscode.ExtensionContext, uri: string) {
 				let logContent: FileLogFormat = await getlogFileData();
 				let deletedFiles: { [key: string]: { path: string; appFolder: string } } = {};
 				for (let appDir in logContent.from_query) {
-					if (logContent.internalNonEditableApps.includes(appDir)) continue; //PR0050 @Nayan 13AUG2025 F7.2.XX_25_27-29 PROC-19721 - added to store internalApps
+					if (logContent.internalNonEditableApps?.includes(appDir)) continue; //PR0050 @Nayan 13AUG2025 F7.2.XX_25_27-29 PROC-19721 - added to store internalApps
 					for (let r_file_path in logContent.from_query[appDir]) {
 						if (
 							logContent.from_query[appDir][r_file_path].status ==
@@ -989,14 +989,14 @@ async function checkForErrorsInModifiedFile(filePaths: string[], flavorToFindCon
 		return;
 	}
 
-	const parsedCommandLineMap = await getParsedCommandLines(configPaths);
+	const parsedCommandLineMap:any = await getParsedCommandLines(configPaths);
 
-	let result = {};
-	let allDiagnostic /* : ts.Diagnostic[] */ = [];
+	let result:any = {};
+	let allDiagnostic:any /* : ts.Diagnostic[] */ = [];
 	// Based on configPath, creating program using compiler options for finding compilation errors
 	for (const configPath in parsedCommandLineMap) {
 		const parsedCommandLine = parsedCommandLineMap[configPath];
-		const program = await buildProgram(parsedCommandLine);
+		const program:any = await buildProgram(parsedCommandLine);
 		for (const file of filePaths) {
 			let sourceFile = program.getSourceFile(file);
 			if (!sourceFile) {
@@ -1039,7 +1039,7 @@ async function getParsedCommandLines(tsConfigPaths: string[]) {
 		throw new Error(
 			"Typescript not found please install typescript v4.9.5 or higher to continue"
 		);
-	let parsedConfigs = {};
+	let parsedConfigs:any = {};
 
 	for (const tsConfigPath of tsConfigPaths) {
 		const configFile = ts.readConfigFile(tsConfigPath, ts.sys.readFile);
@@ -1066,7 +1066,7 @@ async function getParsedCommandLines(tsConfigPaths: string[]) {
  * @returns
  */
 //PR0076 Function to build the TypeScript program based on the parsed command line configuration
-async function buildProgram(parsedCommandLine) {
+async function buildProgram(parsedCommandLine:any) {
 	const ts = await loadTypeScript(); //PR0050 @Nayan 10JUL2025 F7.2.XX_25_27-29 PROC-18559- loading typescript from local/globally installed
 	if (!ts)
 		throw new Error(
@@ -1092,7 +1092,7 @@ async function buildProgram(parsedCommandLine) {
  * @param savePanel	if save all closing the save panel.
  */
 //Pr0076 Displays a warning message if there are compilation errors, user can select either Commit or show errors
-async function displayErrors(diagnostics, selectedFiles, operation, savePanel?) {
+async function displayErrors(diagnostics:any, selectedFiles:{ [key: string]: string[] }, operation:RepoActions, savePanel?:vscode.WebviewPanel) {
 	const ts = await loadTypeScript(); //PR0050 @Nayan 10JUL2025 F7.2.XX_25_27-29 PROC-18559- loading typescript from local/globally installed
 	if (!ts)
 		throw new Error(
@@ -1126,7 +1126,7 @@ async function displayErrors(diagnostics, selectedFiles, operation, savePanel?) 
 				Object.keys(diagnostics).forEach((fileKey) => {
 					let errors = diagnostics[fileKey];
 					outputChannel.appendLine(`Compilation errors in: ${fileKey}`);
-					errors.forEach((error) => {
+					errors.forEach((error:any) => {
 						const { line, character } = error.file.getLineAndCharacterOfPosition(
 							error.start
 						);
@@ -1144,7 +1144,7 @@ async function displayErrors(diagnostics, selectedFiles, operation, savePanel?) 
 			}
 		});
 }
-let outputChannel;
+let outputChannel:vscode.OutputChannel;
 async function getOutputChannel() {
 	if (!outputChannel) {
 		outputChannel = vscode.window.createOutputChannel("Error Log");
@@ -1246,8 +1246,8 @@ async function createWebview(
 						}
 						tempUrl = tempUrl.slice(0, 1);
 						let urlObj: url.UrlObject = url.parse(message.data.url);
-						let context: string | undefined = urlObj.path?.split("/")[1];
-						let landscape: string | undefined = urlObj.path?.split("/")[5];
+						let context: string | undefined = urlObj.pathname?.split("/")[1];
+						let landscape: string | undefined = urlObj.pathname?.split("/")[5];
 						const defaultPort: string = "443";
 						let wildflyport: string | number = urlObj.port ? urlObj.port : defaultPort;
 						panel.webview.postMessage({
@@ -1440,7 +1440,7 @@ async function repoActionForApps(action: RepoActions) {
 							//PR0050 @Nayan 22MAY2025 F7.2.XX_25_21-23 PROC-18290
 							await handleReleasedVersionCheckout(message, logContent);
 						} else await handleRequest(action, message.data.selectedApps);
-					} catch (error) {
+					} catch (error:any) {
 						vscode.window.showWarningMessage(error);
 					}
 					updateAppPanel.dispose();
@@ -1465,7 +1465,7 @@ async function repoActionForApps(action: RepoActions) {
 }
 
 //PR0050 @Nayan 28JAN2025 F7.2.XX_2503-05 PROC-14802 - to handle releasedVersionCheckout
-async function handleReleasedVersionCheckout(message, logContent) {
+async function handleReleasedVersionCheckout(message:any, logContent:FileLogFormat) {
 	const selectedApp = message.data.selectedApps[0];
 	const checkoutFVsKeys = logContent?.checkoutFVs ? Object.keys(logContent.checkoutFVs) : [];
 	if (
@@ -1480,7 +1480,7 @@ async function handleReleasedVersionCheckout(message, logContent) {
 	else await handleRequest(message.data.actionType, message.data.selectedApps);
 }
 //PR0050 @Nayan 28JAN2025 F7.2.XX_2503-05 PROC-14802 - to handle Request
-async function handleRequest(action: RepoActions, selectedApps) {
+async function handleRequest(action: RepoActions, selectedApps:any) {
 	const res = await sendRequestToNodeServer(action, { selectedApps: selectedApps });
 	let resData = typeof res == "string" ? safeParseJSON(res) : res;
 	let msgType: "error" | "info" | "success" | "warning" = resData?.msgType || "info";
@@ -1553,7 +1553,7 @@ async function singleFileOperation(operation: RepoActions) {
 				reqData[appVer] = [r_file_path];
 				await sendRequestToNodeServer("updateFileStatus", {}); //PR0050 @Nayan 05AUG2024 -added as it should go for action based on current status
 				let logFileContent: FileLogFormat = await getlogFileData();
-				if (logFileContent.internalNonEditableApps.includes(appVer)) {
+				if (logFileContent.internalNonEditableApps?.includes(appVer)) {
 					return window.showInformationMessage(
 						appVer + " is not assigned as a writable app."
 					);
@@ -1592,7 +1592,7 @@ async function singleFileOperation(operation: RepoActions) {
 											flavorToFindConfig
 										);
 									});
-								} catch (error) {
+								} catch (error:any) {
 									vscode.window.showErrorMessage("Error : " + error.message);
 									return;
 								}
@@ -1701,7 +1701,7 @@ async function createKlarionConfig(
 	let isPublicNode: Boolean = setup_type;
 	let urlObj: url.UrlObject = url.parse(urlString);
 	// let context = urlObj.path?.split('/')[1];
-	let landscape = urlObj.path?.split("/")[2];
+	let landscape = urlObj.pathname?.split("/")[2];
 	let wildflyport = urlObj.port ? ":" + urlObj.port : "";
 	let workspacePath: string = (
 		vscode.workspace.workspaceFolders as vscode.WorkspaceFolder[]
@@ -1851,7 +1851,7 @@ async function getBearerToken(
 	password: string,
 	domain: string,
 	port: string,
-	configData
+	configData:any
 ) {
 	//PR0018 @Amit 05Sep2024 PROC-7336
 	let origin = port ? `https://${domain}:${port}` : `https://${domain}`;
@@ -1881,7 +1881,7 @@ async function getBearerToken(
 		};
 		let bearerTokenData = await sendRequestHttp(url, "POST", headers, refParams);
 		return "Bearer " + JSON.parse(bearerTokenData.toString()).access_token;
-	} catch (err) {
+	} catch (err:any) {
 		throw Error(err.error_description || "Invalid user credentials"); // PR0018 @Amit 22Nov2024 F6.0 IPROC-13462
 	}
 }
@@ -2433,7 +2433,7 @@ function sendRequestHttp(
 	let opt: url.UrlObject = url.parse(urlString);
 	options.hostname = opt.hostname;
 	options.port = opt.port;
-	options.path = opt.path;
+	options.path = opt.pathname;
 	options.method = method;
 	options.rejectUnauthorized = false;
 	options.headers = headers;
@@ -2486,7 +2486,7 @@ function sendRequestHttp(
 	});
 }
 
-async function addDefaultFlavor(klarionData, configData) {
+async function addDefaultFlavor(klarionData:any, configData:any) {
 	//PR0018 @Amit 05Sep2024 PROC-7336
 	let workspacePath: string = (
 		vscode.workspace.workspaceFolders as vscode.WorkspaceFolder[]
@@ -3497,7 +3497,7 @@ function returnHtmlHead() {
 </head>`.replace(/(\r\n|\n|\r)/gm, "");
 }
 
-function getAppListWebView(logContent, action, checkReleasedVersions, repairApps?) {
+function getAppListWebView(logContent:FileLogFormat, action:RepoActions, checkReleasedVersions:boolean, repairApps?:any) {
 	let appList;
 	if (action === "repair") appList = repairApps || [];
 	else if (action === "checkout")
@@ -3525,16 +3525,16 @@ function getAppListWebView(logContent, action, checkReleasedVersions, repairApps
 	const isRepairAction = action === "repair";
 	const isPreCheckMode = isCheckoutAction || isRepairAction; // used to decide pre-check/disable
 	const showReleasedBtn = isCheckoutAction && !!checkReleasedVersions;
-	const safeId = (s) => (s || "").replace(/[^a-zA-Z0-9_\-]/g, "_");
+	const safeId = (s:any) => (s || "").replace(/[^a-zA-Z0-9_\-]/g, "_");
 
 	// server-side item map for r_flavor, r_version, r_description
 	const itemArray = logContent && Array.isArray(logContent.app_items) ? logContent.app_items : [];
-	const serverItemMap = {};
+	const serverItemMap:any = {};
 	for (const it of itemArray) {
 		if (it && it.r_fv_id) serverItemMap[it.r_fv_id] = it;
 	}
 
-	function escapeHtml(s) {
+	function escapeHtml(s:any) {
 		if (s === null || s === undefined) return "";
 		return String(s)
 			.replace(/&/g, "&amp;")
@@ -3543,7 +3543,7 @@ function getAppListWebView(logContent, action, checkReleasedVersions, repairApps
 			.replace(/"/g, "&quot;");
 	}
 	// card generator (small padding, checkbox gap)
-	const cardHtml = (app, from, checkedOut) => {
+	const cardHtml = (app:any, from:string, checkedOut:any) => {
 		const id = from === "internal" ? `int-${app}` : app;
 		const safe = safeId(id);
 		// show checked-out visual marker always if item present in CHECKOUTS,
@@ -3588,7 +3588,7 @@ function getAppListWebView(logContent, action, checkReleasedVersions, repairApps
 	};
 
 	const writableHtml = appList
-		.map((a) => cardHtml(a, "writable", checkOutFVs.includes(a)))
+		.map((a:any) => cardHtml(a, "writable", checkOutFVs.includes(a)))
 		.join("");
 	const internalHtml = internalNonEditableFVs
 		.map((a) => cardHtml(a, "internal", checkOutFVs.includes(a)))
@@ -4116,7 +4116,7 @@ async function responseCheck(res: any) {
 	return str;
 }
 
-async function getDefaultBVData(klarionData) {
+async function getDefaultBVData(klarionData:any) {
 	//PR0018 @Amit 05Sep2024 PROC-7336
 	let configData;
 	let domain: string = klarionData.port
@@ -4143,6 +4143,7 @@ async function getPortToBeUsed() {
 	} else if (!currentPortNumber || currentPortNumber >= 4000) {
 		defaultPortNumber = 3001;
 	}
+	//@ts-ignore
 	return { currentPortNumber: currentPortNumber, defaultPortNumber: defaultPortNumber };
 }
 //#region //PR0050 @Nayan 22MAY2025 F7.2.XX_25_21-23 PROC-18290
@@ -4156,7 +4157,7 @@ async function restartServer() {
 		vscode.window.showErrorMessage("Failed to restart the server.");
 	}
 }
-async function killPort(): Promise<string[]> {
+async function killPort(): Promise<string[]|any> {
 	const portStr = vsclientPort
 		? vsclientPort
 		: JSON.parse(
